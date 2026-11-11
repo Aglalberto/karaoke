@@ -50,7 +50,7 @@ export function Modal({ title, onClose, children, initialFocus }: ModalProps) {
 
   return (
     <div
-      class="animate-fade-in fixed inset-0 z-50 grid place-items-center bg-black/70 p-4 backdrop-blur-sm"
+      class="animate-fade-in fixed inset-0 z-50 flex items-start justify-center bg-black/70 p-4 pt-[12vh] backdrop-blur-sm sm:items-center sm:pt-4"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}

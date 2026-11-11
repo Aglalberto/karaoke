@@ -1,0 +1,60 @@
+name: Resolve videos
+
+# Preenche e valida os vídeos do YouTube das listas (src/data/songs.json).
+# Roda todo dia de madrugada e também pode ser disparado manualmente na aba Actions.
+on:
+  schedule:
+    - cron: '17 7 * * *' # 04:17 no horário de Brasília
+  workflow_dispatch:
+    inputs:
+      max_searches:
+        description: 'Máximo de buscas nesta execução (cada busca usa 100 das 10.000 unidades diárias)'
+        required: false
+        default: '50'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: resolve-videos
+  cancel-in-progress: false
+
+jobs:
+  resolve:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      changed: ${{ steps.resolve.outputs.changed }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Buscar e validar vídeos
+        id: resolve
+        run: node scripts/resolve-videos.mjs
+        env:
+          YT_API_KEY: ${{ secrets.YT_API_KEY }}
+          MAX_SEARCHES: ${{ inputs.max_searches || '50' }}
+
+      - name: Salvar alterações
+        if: steps.resolve.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/data/songs.json
+          git commit -m "chore: atualiza vídeos das listas"
+          git push
+
+  deploy:
+    needs: resolve
+    if: needs.resolve.outputs.changed == 'true'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
