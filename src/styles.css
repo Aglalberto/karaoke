@@ -1,0 +1,26 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/figtree';
+
+@theme {
+  --font-sans: 'Figtree Variable', ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html,
+  body,
+  #app {
+    height: 100%;
+  }
+  body {
+    font-family: var(--font-sans);
+    overscroll-behavior: none;
+  }
+  ::selection {
+    background: rgb(255 255 255 / 0.85);
+    color: #0a0a0a;
+  }
+  :focus-visible {
+    outline: 2px solid rgb(255 255 255 / 0.7);
+    outline-offset: 2px;
+  }
+}
