@@ -3,6 +3,27 @@
 
 @theme {
   --font-sans: 'Figtree Variable', ui-sans-serif, system-ui, sans-serif;
+
+  /* Paleta monocromática (fundo escuro, uso noturno) */
+  --color-canvas: #0a0a0a;
+  --color-surface: #101010;
+  --color-raised: #181818;
+  --color-stage: #0d0d0d;
+
+  --animate-fade-in: fade-in 180ms ease-out both;
+  --animate-pop-in: pop-in 200ms cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px) scale(0.97);
+    }
+  }
 }
 
 @layer base {
@@ -14,13 +35,109 @@
   body {
     font-family: var(--font-sans);
     overscroll-behavior: none;
+    -webkit-tap-highlight-color: transparent;
   }
   ::selection {
     background: rgb(255 255 255 / 0.85);
     color: #0a0a0a;
   }
   :focus-visible {
-    outline: 2px solid rgb(255 255 255 / 0.7);
+    outline: 2px solid rgb(255 255 255 / 0.75);
     outline-offset: 2px;
+  }
+  input[type='search']::-webkit-search-cancel-button {
+    filter: invert(1) brightness(0.6);
+  }
+}
+
+@layer components {
+  /* Texto em relevo (bevel and emboss): luz em cima/esquerda, sombra embaixo/direita */
+  .text-emboss {
+    color: #1d1d1d;
+    text-shadow:
+      -1px -1px 0 rgb(255 255 255 / 0.13),
+      -2px -2px 1px rgb(255 255 255 / 0.04),
+      1px 1px 0 rgb(0 0 0 / 0.95),
+      2px 3px 4px rgb(0 0 0 / 0.75);
+  }
+
+  /* Área do vídeo: o quadro 16:9 ocupa o máximo possível do espaço livre */
+  .stage-box {
+    container-type: size;
+  }
+  .video-frame {
+    width: min(100cqw, calc(100cqh * 16 / 9));
+    aspect-ratio: 16 / 9;
+  }
+  .stage-glow {
+    background: radial-gradient(120% 90% at 50% 40%, #151515 0%, var(--color-stage) 60%, #080808 100%);
+  }
+
+  /* Barras de rolagem discretas */
+  .scroll-thin {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(255 255 255 / 0.14) transparent;
+  }
+  .scroll-x {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(255 255 255 / 0.14) transparent;
+    mask-image: linear-gradient(to right, #000 calc(100% - 56px), transparent);
+  }
+
+  /* Equalizador do cartão "Tocando agora" */
+  .eq {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 14px;
+  }
+  .eq span {
+    width: 3px;
+    border-radius: 1px;
+    background: currentColor;
+    animation: eq 900ms ease-in-out infinite;
+  }
+  .eq span:nth-child(2) {
+    animation-delay: -300ms;
+  }
+  .eq span:nth-child(3) {
+    animation-delay: -600ms;
+  }
+  @keyframes eq {
+    0%,
+    100% {
+      height: 30%;
+    }
+    50% {
+      height: 100%;
+    }
+  }
+
+  /* Anel da contagem regressiva */
+  .countdown-ring {
+    animation: countdown linear forwards;
+  }
+  @keyframes countdown {
+    to {
+      stroke-dashoffset: var(--ring-length);
+    }
+  }
+
+  /* Item sendo arrastado na fila */
+  .sortable-ghost {
+    opacity: 0.25;
+  }
+  .sortable-drag {
+    opacity: 0.95;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
   }
 }

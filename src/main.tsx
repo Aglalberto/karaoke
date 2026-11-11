@@ -1,12 +1,12 @@
 import { render } from 'preact';
 import './styles.css';
 
-function App() {
-  return (
-    <main class="grid h-dvh place-items-center">
-      <h1 class="text-5xl font-extrabold tracking-tight">Karaokê</h1>
-    </main>
-  );
-}
+const app = document.getElementById('app')!;
+const tvId = new URLSearchParams(window.location.search).get('tv');
 
-render(<App />, document.getElementById('app')!);
+// Carrega só o código do modo em uso: TV (computador) ou controle (celular, via QR Code).
+if (tvId !== null) {
+  import('./remote/RemoteApp').then(({ RemoteApp }) => render(<RemoteApp tvId={tvId} />, app));
+} else {
+  import('./tv/TvApp').then(({ TvApp }) => render(<TvApp />, app));
+}
