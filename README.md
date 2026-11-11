@@ -26,30 +26,51 @@ Quando uma música termina, ela vai para o histórico e aparece a tela **"Agora 
 
 ## Configuração (uma vez)
 
-Sem essas chaves o site já funciona no modo TV com as listas. A busca e o QR Code ficam desativados até a configuração.
+Leva uns 20 minutos. Sem essa configuração o site já funciona no modo TV com as listas, mas a busca e o QR Code ficam desativados.
 
-### 1. Chave da API do YouTube (busca e vídeos das listas)
+### 0. Fazer o merge do PR (primeiro)
 
-1. Acesse o [Google Cloud Console](https://console.cloud.google.com/) e crie um projeto (ou use o mesmo do Firebase).
-2. Em **APIs e serviços → Biblioteca**, ative a **YouTube Data API v3**.
-3. Em **APIs e serviços → Credenciais → Criar credenciais → Chave de API**.
-4. Edite a chave:
-   - **Restrições de aplicativo → Sites (referenciadores HTTP)**: `https://aglalberto.github.io/*` e `http://localhost:5173/*`.
-   - **Restrições de API → Restringir chave**: só a YouTube Data API v3.
-5. No GitHub: **Settings → Secrets and variables → Actions → New repository secret**, nome `YT_API_KEY`.
+Faça o merge do pull request na `main`. O site é publicado sozinho, já com as listas. O merge vem antes porque o botão **Run workflow** do passo 4 só aparece para workflows que estão na `main`.
+
+> Em **Settings → Pages**, a fonte (*Source*) deve estar como **GitHub Actions**.
+
+### 1. Firebase (comece por ele, porque ele cria o projeto no Google)
+
+1. Acesse o [Firebase Console](https://console.firebase.google.com/), clique em **Criar um projeto**, dê o nome `karaoke` e pode desativar o Google Analytics.
+2. **Criação → Realtime Database → Criar banco de dados**: escolha um local (ex.: `us-central1`), marque **Iniciar no modo bloqueado** e clique em **Ativar**.
+3. Na aba **Regras**, apague o conteúdo, cole o arquivo [`database.rules.json`](database.rules.json) e clique em **Publicar**.
+4. **Criação → Authentication → Vamos começar**. Na aba **Método de login**, escolha **Anônimo**, ative e salve.
+5. **Authentication → Configurações → Domínios autorizados → Adicionar domínio**: `aglalberto.github.io`.
+6. Clique em **⚙ → Configurações do projeto → Seus apps** e no ícone **`</>`**. Dê um apelido (ex.: `karaoke-web`), deixe o Hosting desmarcado e clique em **Registrar**. Anote estes 5 valores do `firebaseConfig`: `apiKey`, `authDomain`, `databaseURL`, `projectId` e `appId`.
+   - Se o `databaseURL` não aparecer, copie o endereço do topo da página do Realtime Database (algo como `https://karaoke-xxxx-default-rtdb.firebaseio.com`).
+
+> Essas configurações do Firebase são públicas por natureza; quem protege os dados são as regras do banco. Pelas regras, o celular só consegue criar pedidos e excluir as próprias músicas, e só a TV dona da fila publica a cópia da fila.
+
+### 2. Chave da API do YouTube (busca e vídeos das listas)
+
+1. Acesse o [Google Cloud Console](https://console.cloud.google.com/) e selecione o projeto `karaoke` no seletor do topo. É o mesmo projeto criado pelo Firebase.
+2. **APIs e serviços → Biblioteca**: procure **YouTube Data API v3** e clique em **Ativar**.
+3. **APIs e serviços → Credenciais → + Criar credenciais → Chave de API**. Crie uma chave **nova**. Não reaproveite a "Browser key (auto created by Firebase)".
+4. Edite a chave nova:
+   - **Restrições de aplicativo → Sites**: `https://aglalberto.github.io/*` e `http://localhost:5173/*`.
+   - **Restrições de API → Restringir chave**: só a **YouTube Data API v3**. Salve.
+5. Copie a chave. As restrições podem levar até 5 minutos para valer.
 
 > A chave vai junto do site publicado (é assim que o navegador consegue buscar); por isso a restrição por site é essencial. A cota gratuita é de 10.000 unidades por dia, e cada busca usa 100 (cerca de 100 buscas por dia). As buscas ficam em cache por 24h em cada navegador.
 
-### 2. Firebase (QR Code / celular)
+### 3. GitHub: guardar as chaves
 
-1. Acesse o [Firebase Console](https://console.firebase.google.com/) e crie um projeto (o Google Analytics é opcional).
-2. **Criação → Realtime Database → Criar banco de dados** (qualquer local, modo bloqueado). Na aba **Regras**, cole o conteúdo de [`database.rules.json`](database.rules.json) e publique.
-3. **Criação → Authentication → Começar → Método de login**: ative **Anônimo**.
-4. Em **Authentication → Configurações → Domínios autorizados**, adicione `aglalberto.github.io`.
-5. Em **Configurações do projeto → Seus apps**, registre um app **Web** (`</>`) e copie os valores de `firebaseConfig`.
-6. No GitHub: **Settings → Secrets and variables → Actions → aba Variables → New repository variable**, uma para cada valor:
+Em **Settings → Secrets and variables → Actions**:
 
-| Variável | Valor do `firebaseConfig` |
+**Aba Secrets → New repository secret**
+
+| Name | Valor |
+|---|---|
+| `YT_API_KEY` | a chave do YouTube |
+
+**Aba Variables → New repository variable** (uma por linha, valores sem aspas)
+
+| Name | Valor do `firebaseConfig` |
 |---|---|
 | `VITE_FIREBASE_API_KEY` | `apiKey` |
 | `VITE_FIREBASE_AUTH_DOMAIN` | `authDomain` |
@@ -57,16 +78,31 @@ Sem essas chaves o site já funciona no modo TV com as listas. A busca e o QR Co
 | `VITE_FIREBASE_PROJECT_ID` | `projectId` |
 | `VITE_FIREBASE_APP_ID` | `appId` |
 
-> Essas configurações do Firebase são públicas por natureza; quem protege os dados são as regras do banco. Pelas regras, o celular só consegue criar pedidos e excluir as próprias músicas, e só a TV dona da fila publica a cópia da fila.
-
-### 3. Publicar
+### 4. Publicar com as chaves
 
 Na aba **Actions**:
 
-1. Rode **Resolve videos** (*Run workflow*) para buscar os vídeos das listas. Cada execução faz até 50 buscas para sobrar cota para o site, então a primeira carga completa leva uns 3 dias. Depois disso, o workflow roda sozinho toda madrugada, valida os vídeos e troca os que saírem do ar.
-2. Rode **Deploy** para publicar com as chaves novas. Todo push na `main` também publica.
+1. **Resolve videos → Run workflow → Run**. Cada execução preenche até 50 músicas, para sobrar cota para o site. Depois disso, o workflow roda sozinho toda madrugada, valida os vídeos e troca os que saírem do ar. A carga inicial completa leva uns 3 dias. Enquanto uma música ainda não tem vídeo, o "+" abre a busca já preenchida com o nome dela.
+2. **Deploy → Run workflow → Run**. Isso publica o site já com as chaves. Todo push na `main` também publica.
 
-Enquanto uma música das listas ainda não tem vídeo definido, o "+" abre a busca já preenchida com o nome dela.
+### 5. Testar
+
+1. Abra https://aglalberto.github.io/karaoke/ no computador. O QR Code deve aparecer no menu.
+2. Faça uma busca pelo menu e confira se aparecem resultados.
+3. Leia o QR com o celular (teste também com o celular no 4G). Deve aparecer "TV conectada".
+4. Adicione uma música pelo celular e veja se ela entra na fila da TV.
+5. Toque uma música até o fim e confira se ela aparece no histórico, na TV e no celular.
+
+### Se algo falhar
+
+| Sintoma | Causa provável |
+|---|---|
+| QR mostra "Configure o Firebase para ativar" | Variáveis faltando ou com nome errado, ou o Deploy não rodou depois de criá-las |
+| QR mostra "Sem conexão" | Login Anônimo desativado, regras não publicadas ou `databaseURL` errado |
+| Busca diz que recusou a chave | API não ativada ou restrição de site errada (espere 5 min depois de salvar) |
+| Busca diz que o limite diário acabou | A cota gratuita do dia acabou; volta no dia seguinte (use as listas) |
+| Celular mostra "TV não encontrada" | A página da TV não está aberta ou não conectou ao Firebase |
+| *Resolve videos* não encontra vídeos | Secret `YT_API_KEY` ausente ou API do YouTube não ativada |
 
 ## Desenvolvimento
 
