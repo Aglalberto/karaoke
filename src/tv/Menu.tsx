@@ -4,8 +4,9 @@ import { HistoryListView } from '../components/HistoryListView';
 import { SearchPanel } from '../components/SearchPanel';
 import { SongListView } from '../components/SongListView';
 import { getList, songLists } from '../lib/songs';
-import { history } from '../lib/state';
-import { requestAdd } from './dialogs';
+import { clearHistory, history } from '../lib/state';
+import { requestAdd, requestConfirm } from './dialogs';
+import { FullscreenButton } from './FullscreenButton';
 import { QrCard } from './QrCard';
 import { goHome, menuOpen, menuView, openMenuView } from './ui';
 
@@ -43,6 +44,7 @@ function MenuHome() {
           <Mic size={18} strokeWidth={2.5} aria-hidden="true" />
         </span>
         <h1 class="text-2xl font-extrabold tracking-tight text-white">Karaokê</h1>
+        <FullscreenButton />
       </header>
 
       <button
@@ -97,6 +99,16 @@ function NavButton({
   );
 }
 
+function confirmClearHistory() {
+  const count = history.value.length;
+  requestConfirm({
+    title: 'Limpar histórico?',
+    body: `${count === 1 ? 'A música cantada será apagada' : `As ${count} músicas cantadas serão apagadas`} do histórico, na TV e nos celulares. Isso não pode ser desfeito.`,
+    confirmLabel: 'Limpar histórico',
+    onConfirm: clearHistory,
+  });
+}
+
 function MenuContent() {
   const view = menuView.value;
   const title =
@@ -112,7 +124,18 @@ function MenuContent() {
         <ChevronLeft size={18} aria-hidden="true" />
         Voltar
       </button>
-      <h2 class="px-1 pb-4 pt-3 text-xl font-bold tracking-tight text-white">{title}</h2>
+      <div class="flex items-center gap-3 px-1 pb-4 pt-3">
+        <h2 class="min-w-0 flex-1 truncate text-xl font-bold tracking-tight text-white">{title}</h2>
+        {view.type === 'history' && history.value.length > 0 && (
+          <button
+            type="button"
+            onClick={confirmClearHistory}
+            class="h-8 shrink-0 rounded-lg border border-white/10 px-3 text-sm font-medium text-neutral-300 transition hover:border-white/25 hover:bg-white/[0.05] hover:text-white"
+          >
+            Limpar histórico
+          </button>
+        )}
+      </div>
 
       {view.type === 'search' ? (
         <SearchPanel initialQuery={view.query} autoSearch={view.autoSearch} onAdd={requestAdd} />

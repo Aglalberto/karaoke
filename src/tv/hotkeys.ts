@@ -1,3 +1,4 @@
+import { toggleFullscreen } from '../lib/fullscreen';
 import { openModals } from '../lib/modal-stack';
 import { togglePlay } from './playback';
 import { cardMenu, goHome, menuView } from './ui';
@@ -20,6 +21,13 @@ function onKeyDown(event: KeyboardEvent) {
       goHome();
       event.preventDefault();
     }
+    return;
+  }
+
+  if ((event.key === 'f' || event.key === 'F') && !event.repeat) {
+    if (openModals.value > 0 || isTypingTarget(event.target)) return;
+    event.preventDefault();
+    void toggleFullscreen();
     return;
   }
 

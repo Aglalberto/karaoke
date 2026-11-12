@@ -12,6 +12,12 @@ function openCardMenu(itemId: string) {
   cardMenu.value = cardMenu.value?.itemId === itemId ? null : { itemId };
 }
 
+/** Botão direito no cartão faz o mesmo que o clique normal (no lugar do menu do navegador). */
+const onCardContextMenu = (itemId: string) => (event: MouseEvent) => {
+  event.preventDefault();
+  openCardMenu(itemId);
+};
+
 export function confirmSkip() {
   const cur = current.value;
   if (!cur) return;
@@ -102,7 +108,7 @@ function NowPlayingCard() {
   const playing = playerState.value === 1;
   const label = cur.startedAt ? 'Tocando agora' : 'É a vez de';
   return (
-    <div data-card-id="current" class="flex w-72 shrink-0 items-stretch overflow-hidden rounded-xl bg-white text-neutral-950">
+    <div data-card-id="current" onContextMenu={onCardContextMenu('current')} class="flex w-72 shrink-0 items-stretch overflow-hidden rounded-xl bg-white text-neutral-950">
       <button
         type="button"
         aria-haspopup="menu"
@@ -154,6 +160,7 @@ function QueueCard({ item, index, position }: { item: QueueItem; index: number; 
   return (
     <li
       data-card-id={item.id}
+      onContextMenu={onCardContextMenu(item.id)}
       class={`flex h-full w-64 shrink-0 items-stretch overflow-hidden rounded-xl border bg-raised transition-colors ${
         item.standby ? 'border-dashed border-white/15 bg-surface' : 'border-white/[0.06]'
       } ${cardMenu.value?.itemId === item.id ? 'ring-1 ring-white/40' : ''}`}

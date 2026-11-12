@@ -246,6 +246,12 @@
       "videoId": "nHDysMb5CUw",
       "checkedAt": "2026-11-12"
     },
+    "eu-vou-tirar-voce-desse-lugar": {
+      "artist": "Odair José",
+      "title": "Eu Vou Tirar Você Desse Lugar",
+      "videoId": null,
+      "checkedAt": null
+    },
     "every-breath-you-take": {
       "artist": "The Police",
       "title": "Every Breath You Take",
@@ -299,6 +305,12 @@
       "title": "Friends in Low Places",
       "videoId": "yUzq9Q1tPxE",
       "checkedAt": "2026-11-12"
+    },
+    "fuscao-preto": {
+      "artist": "Almir Rogério",
+      "title": "Fuscão Preto",
+      "videoId": null,
+      "checkedAt": null
     },
     "garcom": {
       "artist": "Reginaldo Rossi",
@@ -474,6 +486,12 @@
       "videoId": null,
       "checkedAt": null
     },
+    "morango-do-nordeste": {
+      "artist": "Lairton e Seus Teclados",
+      "title": "Morango do Nordeste",
+      "videoId": null,
+      "checkedAt": null
+    },
     "mr-brightside": {
       "artist": "The Killers",
       "title": "Mr. Brightside",
@@ -528,6 +546,12 @@
       "videoId": null,
       "checkedAt": null
     },
+    "pare-de-tomar-a-pilula": {
+      "artist": "Odair José",
+      "title": "Pare de Tomar a Pílula",
+      "videoId": null,
+      "checkedAt": null
+    },
     "pense-em-mim": {
       "artist": "Leandro & Leonardo",
       "title": "Pense em Mim",
@@ -573,6 +597,12 @@
     "rolling-in-the-deep": {
       "artist": "Adele",
       "title": "Rolling in the Deep",
+      "videoId": null,
+      "checkedAt": null
+    },
+    "sandra-rosa-madalena": {
+      "artist": "Sidney Magal",
+      "title": "Sandra Rosa Madalena (A Cigana)",
       "videoId": null,
       "checkedAt": null
     },
@@ -690,6 +720,12 @@
       "videoId": null,
       "checkedAt": null
     },
+    "tudo-passara": {
+      "artist": "Nelson Ned",
+      "title": "Tudo Passará",
+      "videoId": null,
+      "checkedAt": null
+    },
     "um-dia-de-domingo": {
       "artist": "Gal Costa & Tim Maia",
       "title": "Um Dia de Domingo",
@@ -711,6 +747,18 @@
     "valerie": {
       "artist": "Mark Ronson feat. Amy Winehouse",
       "title": "Valerie",
+      "videoId": null,
+      "checkedAt": null
+    },
+    "voce-nao-me-ensinou-a-te-esquecer": {
+      "artist": "Fernando Mendes",
+      "title": "Você Não Me Ensinou a Te Esquecer",
+      "videoId": null,
+      "checkedAt": null
+    },
+    "vou-rifar-meu-coracao": {
+      "artist": "Lindomar Castilho",
+      "title": "Vou Rifar Meu Coração",
       "videoId": null,
       "checkedAt": null
     },
@@ -788,6 +836,22 @@
         "mr-brightside",
         "dancing-queen",
         "total-eclipse-of-the-heart"
+      ]
+    },
+    {
+      "id": "top10-brega",
+      "title": "Top 10 cantadas no brega",
+      "songs": [
+        "eu-nao-sou-cachorro-nao",
+        "garcom",
+        "fuscao-preto",
+        "sandra-rosa-madalena",
+        "pare-de-tomar-a-pilula",
+        "voce-nao-me-ensinou-a-te-esquecer",
+        "eu-vou-tirar-voce-desse-lugar",
+        "morango-do-nordeste",
+        "vou-rifar-meu-coracao",
+        "tudo-passara"
       ]
     },
     {

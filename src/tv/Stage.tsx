@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { EmbossText } from '../components/EmbossText';
 import { current } from '../lib/state';
-import { FullscreenButton } from './FullscreenButton';
-import { NEXT_UP_SECONDS, mountPlayer, nextUp, playerError, playerState, startNow } from './playback';
+import { mountPlayer, nextUp, playerError, playerState, startNow } from './playback';
 
 export function Stage() {
   const host = useRef<HTMLDivElement>(null);
@@ -19,8 +18,7 @@ export function Stage() {
   const waitingPlay = !!cur && !showingNextUp && cur.startedAt === null && playerState.value !== 1 && playerState.value !== 3;
 
   return (
-    <main class="stage-glow relative min-h-0 flex-1 px-6 pb-5 pt-14">
-      <FullscreenButton />
+    <main class="stage-glow relative min-h-0 flex-1 px-6 py-5">
       <div class="stage-box grid h-full w-full place-items-center">
         <div class="video-frame relative overflow-hidden rounded-2xl bg-black shadow-2xl shadow-black/70 ring-1 ring-white/[0.06]">
           <div ref={host} class={`absolute inset-0 [&>iframe]:size-full ${cur ? '' : 'invisible'}`} />
@@ -68,10 +66,6 @@ function NextUp() {
     return () => window.clearInterval(timer);
   }, [endsAt]);
 
-  const radius = 26;
-  const length = 2 * Math.PI * radius;
-  const elapsedMs = NEXT_UP_SECONDS * 1000 - Math.max(0, endsAt - Date.now());
-
   return (
     <div class="animate-fade-in absolute inset-0 z-10 flex flex-col items-center justify-center gap-[2.2cqh] bg-[#0b0b0b] px-10 text-center">
       <p class="text-[clamp(0.75rem,1.3cqw,1rem)] font-semibold uppercase tracking-[0.35em] text-neutral-500">Agora é a vez de</p>
@@ -83,31 +77,9 @@ function NextUp() {
         {cur.channel ? ` — ${cur.channel}` : ''}
       </p>
 
-      <div class="relative mt-[1.5cqh] grid size-16 place-items-center">
-        <svg viewBox="0 0 64 64" class="absolute inset-0 -rotate-90" aria-hidden="true">
-          <circle cx="32" cy="32" r={radius} fill="none" stroke="rgb(255 255 255 / 0.1)" stroke-width="3" />
-          <circle
-            cx="32"
-            cy="32"
-            r={radius}
-            fill="none"
-            stroke="white"
-            stroke-width="3"
-            stroke-linecap="round"
-            stroke-dasharray={length}
-            stroke-dashoffset={0}
-            class="countdown-ring"
-            style={{
-              '--ring-length': `${length}px`,
-              animationDuration: `${NEXT_UP_SECONDS * 1000}ms`,
-              animationDelay: `-${elapsedMs}ms`,
-            }}
-          />
-        </svg>
-        <span class="text-xl font-bold tabular-nums text-white" aria-live="polite">
-          {remaining}
-        </span>
-      </div>
+      <span class="mt-[1.5cqh] text-[clamp(1.5rem,3cqw,2.5rem)] font-bold leading-none tabular-nums text-white" aria-live="polite">
+        {remaining}
+      </span>
 
       <button
         type="button"

@@ -18,7 +18,7 @@ export function TvModals() {
             const item = addToQueue(video, singer);
             singerFor.value = null;
             if (!item) return;
-            if (wasIdle && current.value?.id === item.id) showToast(`${singer} é a próxima a cantar!`);
+            if (wasIdle && current.value?.id === item.id) showToast(`Próximo(a) a cantar: ${singer.trim()}`);
             else showToast(`Adicionada à fila · ${queue.value.filter((i) => !i.standby).length}ª posição`);
           }}
         />

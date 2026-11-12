@@ -16,11 +16,12 @@ Plataforma web de karaokê numa única página: as músicas mais cantadas no Bra
 |---|---|
 | Adicionar música | "+" na busca ou numa lista → "Quem vai cantar essa?" |
 | Play / pause | Barra de espaço (fora de pop-ups e campos de texto) |
-| Opções de uma música da fila | Clique no cartão: **Próxima da fila**, **Standby** / **Retomar a fila**, **Excluir** |
+| Opções de uma música da fila | Clique (botão esquerdo ou direito) no cartão: **Próxima da fila**, **Standby** / **Retomar a fila**, **Excluir** |
 | Reordenar a fila | Arraste pelo botão de ordenar (⇅) ou use as setas ← → com ele focado |
 | Standby | A música fica congelada no lugar e é pulada até ser retomada (ex.: a pessoa saiu e canta quando voltar) |
 | Pular a música atual | Botão ⏭ no cartão "Tocando agora" |
-| Tela cheia | Botão no canto superior direito |
+| Tela cheia | Tecla **F** (fora de pop-ups e campos de texto) ou o botão ao lado do nome "Karaokê" no menu |
+| Limpar histórico | Menu → Histórico → **Limpar histórico** (pede confirmação) |
 
 Quando uma música termina, ela vai para o histórico e aparece a tela **"Agora é a vez de"** com uma contagem de 8 segundos. A próxima música fica carregada e pausada: ela só começa quando alguém aperta play ou espaço.
 

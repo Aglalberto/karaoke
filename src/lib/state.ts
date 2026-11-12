@@ -192,6 +192,10 @@ export function finishCurrent(reason: 'ended' | 'skipped' | 'error') {
   });
 }
 
+export function clearHistory() {
+  history.value = [];
+}
+
 export function getSnapshot(): Snapshot {
   return {
     current: current.value,
