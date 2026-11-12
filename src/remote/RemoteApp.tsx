@@ -5,6 +5,7 @@ import { SearchPanel } from '../components/SearchPanel';
 import { SingerModal } from '../components/SingerModal';
 import { Toasts } from '../components/Toasts';
 import { createRemoteBridge, type RemoteStatus } from '../lib/remote-bridge';
+import { recentSingers } from '../lib/singers';
 import { showToast } from '../lib/toast';
 import type { Video } from '../lib/types';
 import { RemoteHistory } from './RemoteHistory';
@@ -111,7 +112,14 @@ export function RemoteApp({ tvId }: { tvId: string }) {
         </>
       )}
 
-      {pending && <SingerModal video={pending} onClose={() => setPending(null)} onConfirm={(singer) => send(pending, singer)} />}
+      {pending && (
+        <SingerModal
+          video={pending}
+          names={recentSingers({ current: snapshot?.current, queue: snapshot?.queue, history: snapshot?.history })}
+          onClose={() => setPending(null)}
+          onConfirm={(singer) => send(pending, singer)}
+        />
+      )}
       <Toasts class="bottom-24" />
     </div>
   );

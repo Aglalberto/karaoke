@@ -1,6 +1,7 @@
 import { ConfirmModal } from '../components/ConfirmModal';
 import { SingerModal } from '../components/SingerModal';
-import { addToQueue, current, queue } from '../lib/state';
+import { recentSingers } from '../lib/singers';
+import { addToQueue, current, history, queue } from '../lib/state';
 import { showToast } from '../lib/toast';
 import { confirmDialog, singerFor } from './dialogs';
 
@@ -12,6 +13,7 @@ export function TvModals() {
       {video && (
         <SingerModal
           video={video}
+          names={recentSingers({ current: current.value, queue: queue.value, history: history.value })}
           onClose={() => (singerFor.value = null)}
           onConfirm={(singer) => {
             const wasIdle = !current.value;
