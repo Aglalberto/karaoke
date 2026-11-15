@@ -803,6 +803,66 @@
       "title": "Zombie",
       "videoId": "F45ayZ5ScGY",
       "checkedAt": "2026-11-14"
+    },
+    "livre-estou": {
+      "artist": "Frozen: Uma Aventura Congelante",
+      "title": "Livre Estou",
+      "videoId": null,
+      "checkedAt": null
+    },
+    "hakuna-matata": {
+      "artist": "O Rei Leão",
+      "title": "Hakuna Matata",
+      "videoId": null,
+      "checkedAt": null
+    },
+    "saber-quem-sou": {
+      "artist": "Moana",
+      "title": "Saber Quem Sou",
+      "videoId": null,
+      "checkedAt": null
+    },
+    "nao-falamos-do-bruno": {
+      "artist": "Encanto",
+      "title": "Não Falamos do Bruno",
+      "videoId": null,
+      "checkedAt": null
+    },
+    "aqui-no-mar": {
+      "artist": "A Pequena Sereia",
+      "title": "Aqui no Mar",
+      "videoId": null,
+      "checkedAt": null
+    },
+    "um-mundo-ideal": {
+      "artist": "Aladdin",
+      "title": "Um Mundo Ideal",
+      "videoId": null,
+      "checkedAt": null
+    },
+    "de-nada": {
+      "artist": "Moana",
+      "title": "De Nada",
+      "videoId": null,
+      "checkedAt": null
+    },
+    "amigo-estou-aqui": {
+      "artist": "Toy Story",
+      "title": "Amigo, Estou Aqui",
+      "videoId": null,
+      "checkedAt": null
+    },
+    "ciclo-sem-fim": {
+      "artist": "O Rei Leão",
+      "title": "Ciclo Sem Fim",
+      "videoId": null,
+      "checkedAt": null
+    },
+    "voce-quer-brincar-na-neve": {
+      "artist": "Frozen: Uma Aventura Congelante",
+      "title": "Você Quer Brincar na Neve?",
+      "videoId": null,
+      "checkedAt": null
     }
   },
   "lists": [
@@ -852,6 +912,22 @@
         "morango-do-nordeste",
         "vou-rifar-meu-coracao",
         "tudo-passara"
+      ]
+    },
+    {
+      "id": "top10-disney",
+      "title": "Top 10 Disney em português",
+      "songs": [
+        "livre-estou",
+        "hakuna-matata",
+        "saber-quem-sou",
+        "nao-falamos-do-bruno",
+        "aqui-no-mar",
+        "um-mundo-ideal",
+        "de-nada",
+        "amigo-estou-aqui",
+        "ciclo-sem-fim",
+        "voce-quer-brincar-na-neve"
       ]
     },
     {
