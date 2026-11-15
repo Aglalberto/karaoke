@@ -1,4 +1,3 @@
-import { Plus } from 'lucide-preact';
 import type { ComponentChildren } from 'preact';
 
 interface SongRowProps {
@@ -11,27 +10,24 @@ interface SongRowProps {
   wrapTitle?: boolean;
 }
 
-/** Linha de música (listas e busca) com botão "+" para adicionar à fila. */
+/** Linha de música (listas e busca): clicar na linha adiciona à fila. */
 export function SongRow({ leading, title, subtitle, onAdd, addLabel, wrapTitle = false }: SongRowProps) {
   return (
-    <li class="group flex items-center gap-3 rounded-xl px-2 py-2 transition hover:bg-white/[0.04]">
-      {leading}
-      <div class="min-w-0 flex-1">
-        <p class={`${wrapTitle ? 'line-clamp-2 text-[15px]' : 'truncate'} font-semibold leading-snug text-neutral-100`} title={title}>
-          {title}
-        </p>
-        <p class="truncate text-sm leading-snug text-neutral-400" title={subtitle}>
-          {subtitle}
-        </p>
-      </div>
+    <li>
       <button
         type="button"
         onClick={onAdd}
         aria-label={addLabel}
         title="Adicionar à fila"
-        class="grid size-10 shrink-0 place-items-center rounded-full border border-white/10 text-neutral-300 transition hover:border-white hover:bg-white hover:text-neutral-950"
+        class="flex w-full items-center gap-3 rounded-xl px-2 py-2 text-left transition hover:bg-white/[0.06] focus-visible:bg-white/[0.06] active:bg-white/[0.1]"
       >
-        <Plus size={20} strokeWidth={2.25} aria-hidden="true" />
+        {leading}
+        <span class="min-w-0 flex-1">
+          <span class={`block ${wrapTitle ? 'line-clamp-2 text-[15px]' : 'truncate'} font-semibold leading-snug text-neutral-100`}>
+            {title}
+          </span>
+          <span class="block truncate text-sm leading-snug text-neutral-400">{subtitle}</span>
+        </span>
       </button>
     </li>
   );
