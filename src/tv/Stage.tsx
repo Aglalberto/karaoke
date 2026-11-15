@@ -1,9 +1,7 @@
-import { Plus } from 'lucide-preact';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { EmbossText } from '../components/EmbossText';
 import { current } from '../lib/state';
 import { mountPlayer, nextUp, playerError, playerState, startNow } from './playback';
-import { openMenuView } from './ui';
 
 export function Stage() {
   const host = useRef<HTMLDivElement>(null);
@@ -26,20 +24,12 @@ export function Stage() {
           <div ref={host} class={`absolute inset-0 [&>iframe]:size-full ${cur ? '' : 'invisible'}`} />
 
           {!cur && (
-            <div class="stage-glow absolute inset-0 flex flex-col items-center justify-center gap-[4cqh] px-10 text-center">
+            <div class="stage-glow absolute inset-0 grid place-items-center px-10 text-center">
               <EmbossText class="text-[clamp(1.75rem,4.4cqw,4.25rem)] leading-[1.15]">
                 Fila vazia.
                 <br />
                 Adicione músicas para cantar.
               </EmbossText>
-              <button
-                type="button"
-                onClick={() => openMenuView({ type: 'home' })}
-                class="inline-flex h-12 items-center gap-2 rounded-full bg-white pl-5 pr-6 text-base font-semibold text-neutral-950 shadow-lg shadow-black/40 transition hover:bg-neutral-200"
-              >
-                <Plus size={20} strokeWidth={2.5} aria-hidden="true" />
-                Adicionar música
-              </button>
             </div>
           )}
 

@@ -131,6 +131,8 @@ effect(() => {
     lastHandledId = null;
     clearNextUp();
     stop();
+    // Fila vazia: o menu abre para escolher a próxima música.
+    menuOpen.value = true;
     return;
   }
   if (cur.id === lastHandledId) return;
