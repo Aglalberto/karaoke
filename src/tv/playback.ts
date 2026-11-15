@@ -19,6 +19,45 @@ let nextUpTimer: number | undefined;
 let lastHandledId: string | null = current.value?.id ?? null; // ao recarregar, não repete a tela de vez
 let started = false;
 
+/**
+ * Encerra a música atual quando o vídeo termina. Chamada pelo aviso ENDED do YouTube e,
+ * como reserva, pela checagem periódica abaixo (o aviso nem sempre chega).
+ */
+function handleEnded() {
+  if (!current.value) return;
+  loadedVideoId = null;
+  finishCurrent('ended');
+}
+
+const END_CHECK_MS = 1000;
+const END_TOLERANCE_S = 1.5;
+const END_GRACE_MS = 2500;
+let nearEndSince = 0;
+
+/** Reserva: vídeo parado no fim (ou na tela final) por alguns segundos conta como terminado. */
+function checkEnded() {
+  const cur = current.value;
+  if (!player || !ready || !cur || !cur.startedAt || nextUp.value || loadedVideoId !== cur.videoId) {
+    nearEndSince = 0;
+    return;
+  }
+  const state = player.getPlayerState();
+  const duration = player.getDuration?.() ?? 0;
+  const time = player.getCurrentTime?.() ?? 0;
+  const atEnd =
+    state === YT.PlayerState.ENDED ||
+    (duration > 0 && time >= duration - END_TOLERANCE_S && state !== YT.PlayerState.PLAYING && state !== YT.PlayerState.BUFFERING);
+  if (!atEnd) {
+    nearEndSince = 0;
+    return;
+  }
+  if (!nearEndSince) nearEndSince = Date.now();
+  else if (Date.now() - nearEndSince >= END_GRACE_MS) {
+    nearEndSince = 0;
+    handleEnded();
+  }
+}
+
 function cue(videoId: string) {
   if (!player || !ready) return;
   if (loadedVideoId === videoId) return;
@@ -57,6 +96,7 @@ export function mountPlayer(element: HTMLElement) {
           onReady: () => {
             ready = true;
             playerState.value = -1;
+            window.setInterval(checkEnded, END_CHECK_MS);
             const cur = current.value;
             if (cur) cue(cur.videoId);
           },
@@ -68,8 +108,7 @@ export function mountPlayer(element: HTMLElement) {
               menuOpen.value = false;
               cardMenu.value = null;
             } else if (event.data === api.PlayerState.ENDED) {
-              loadedVideoId = null;
-              finishCurrent('ended');
+              handleEnded();
             }
           },
           onError: () => {
